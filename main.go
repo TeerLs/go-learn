@@ -1,41 +1,28 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"math/rand/v2"
+	"net/http"
+	"strconv"
 )
 
-// Нужно создать приложение с 2-мя горутинами, где:
+func randomHandler(w http.ResponseWriter, r *http.Request) {
+	randomNum := rand.IntN(6)
 
-// Первая создаёт slice из 10 случайных элементов от 0 до 100 и передаёт их по одному во вторую горутину.
-// Вторая получает числа от 1-й и возводит в квадрат передавая результат в main.
-// В main дожидаемся всех 10 чисел, которые были возведены в квадрат и выводим их в консоль.
+	w.Write([]byte(strconv.Itoa(randomNum)))
+}
 
 func main() {
-	nums := make(chan int)
-	results := make(chan int)
+	server := http.Server{
+      Addr: ":8081",
+      Handler: nil,
+    }
 
-	go func() {
-		slice := make([]int, 10)
-		for i := range slice {
-			slice[i] = rand.IntN(101)
-		}
+    http.HandleFunc("/random", randomHandler)
 
-		for _, val := range slice {
-			nums <- val
-		}
-		close(nums)
-	}()
-
-	go func() {
-		for val := range nums {
-			square := val * val
-			results <- square
-		}
-		close(results)
-	}()
-
-	for res := range results {
-		fmt.Println(res)
-	}
+    err := server.ListenAndServe()
+    if err != nil {
+      log.Fatal("Error")
+    }
 }
