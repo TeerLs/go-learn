@@ -8,7 +8,7 @@ import (
 )
 
 func randomHandler(w http.ResponseWriter, r *http.Request) {
-	randomNum := rand.IntN(6)
+	randomNum := rand.IntN(7)
 
 	w.Write([]byte(strconv.Itoa(randomNum)))
 }
@@ -23,6 +23,6 @@ func main() {
 
     err := server.ListenAndServe()
     if err != nil {
-      log.Fatal("Error")
+      log.Fatal(err.Error())
     }
 }
