@@ -8,7 +8,7 @@ import (
 )
 
 func randomHandler(w http.ResponseWriter, r *http.Request) {
-	randomNum := rand.IntN(7)
+	randomNum := rand.IntN(6) + 1
 
 	w.Write([]byte(strconv.Itoa(randomNum)))
 }
