@@ -59,7 +59,13 @@ func (handler *VerifyHandler) Send() http.HandlerFunc {
 			return;
 		}
 
-		e.Send(handler.Config.Host + ":" + handler.Config.Port, smtp.PlainAuth("", handler.Config.Email, handler.Config.Password, handler.Config.Host))
+		smtpErr := e.Send(handler.Config.Host + ":" + handler.Config.Port, smtp.PlainAuth("", handler.Config.Email, handler.Config.Password, handler.Config.Host))
+		if smtpErr != nil {
+			res.Json(w, ErrorResponse{
+				Message: "Error sending email: " + smtpErr.Error(),
+			}, http.StatusInternalServerError)
+			return
+		}
 		w.Write([]byte("Verification link sent on your email"))
 	}
 }
