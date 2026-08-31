@@ -10,6 +10,7 @@ import (
 type Config struct {
 	DB DbConfig
 	Auth AuthConfig
+	SMTP SMTPConfig
 }
 
 type DbConfig struct {
@@ -18,6 +19,13 @@ type DbConfig struct {
 
 type AuthConfig struct {
 	Secret string
+}
+
+type SMTPConfig struct {
+	Host string
+	Password string
+	Email string
+	Port string
 }
 
 func LoadConfig() *Config {
@@ -32,6 +40,12 @@ func LoadConfig() *Config {
 		},
 		Auth: AuthConfig{
 			Secret: os.Getenv("Secret"),
+		},
+		SMTP: SMTPConfig{
+			Host: os.Getenv("SMTP_HOST"),
+			Password: os.Getenv("SMTP_PASSWORD"),
+			Email: os.Getenv("SMTP_EMAIL"),
+			Port: os.Getenv("SMTP_PORT"),
 		},
 	}
 
