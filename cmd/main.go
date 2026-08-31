@@ -3,6 +3,7 @@ package main
 import (
 	"go/advanced-demo/configs"
 	"go/advanced-demo/internal/auth"
+	"go/advanced-demo/internal/verify"
 	"log"
 	"net/http"
 )
@@ -18,6 +19,10 @@ func main() {
 
   auth.NewAuthHandler(router, auth.AuthHandlerDeps{
     Config: &conf.Auth,
+  })
+  
+  verify.NewVerifyHandler(router, verify.VerifyHandlerDeps{
+    Config: &conf.SMTP,
   })
 
   err := server.ListenAndServe()
